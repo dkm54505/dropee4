@@ -1,0 +1,54 @@
+Build a full-featured dropshipping and reselling platform called "Dropee" using React (with Vite) for the frontend and Firebase for the backend. The app should include the following core and advanced features:
+
+1. **User System:**
+   - Firebase Authentication (email/phone login)
+   - User Dashboard
+   - Admin Dashboard
+
+2. **Seller Features:**
+   - Become a Seller option (with simple phone verification)
+   - Seller Dashboard to track orders, earnings, and product analytics
+   - Unique shop page per seller (custom URL, banner, product listing)
+   - Wallet to track earnings, with manual withdrawal to UPI/Bank
+
+3. **Product Features:**
+   - Product listing system (for sellers)
+   - Trending products homepage with clean, attractive UI
+   - Auto description & title generator (AI-powered)
+   - Rating & review system
+   - Product suggestions for users based on interest
+   - Real-time product sync from external platforms (like Meesho, IndiaMART)
+
+4. **Order & Commission System:**
+   - Multi-vendor checkout
+   - Supplier-side order handling
+   - 5% commission on each sale
+   - Cashback/coupon system
+
+5. **Referral System:**
+   - Unique referral link for each user
+   - Earn coins or wallet cash through referrals
+
+6. **AI Tools:**
+   - AI chatbot for customer support with FAQ system
+   - AI trend analysis module to suggest best-performing products
+
+7. **Premium Seller Plan (₹199/month):**
+   - Top listing on homepage
+   - Priority analytics
+   - Custom banner & shop enhancements
+   - Razorpay integration for subscription
+
+8. **Admin Features:**
+   - Advanced analytics: revenue, trends, orders
+   - Manage users, sellers, orders
+   - Approve/reject sellers
+
+9. **Notifications & Extras:**
+   - Real-time notifications
+   - PWA (Progressive Web App) support
+   - Course selling module (similar to Millionaire Track)
+   - Coin + Referral rewards system
+   - Commission logic built into Firebase
+
+All features must be responsive and mobile-first. Code should be modular and production-ready, with clean folder structure. Firebase should be used for Auth, Firestore, Storage, Functions, and Hosting.
