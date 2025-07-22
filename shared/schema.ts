@@ -1,125 +1,114 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
+// Firebase Firestore compatible schema
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  uid: text("uid").notNull().unique(), // Firebase UID
-  email: text("email").notNull().unique(),
-  phone: text("phone"),
-  name: text("name").notNull(),
-  role: text("role").notNull().default("user"), // user, seller, admin
-  isVerified: boolean("is_verified").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
+// Firestore User Schema
+export const userSchema = z.object({
+  uid: z.string(), // Firebase UID (document ID)
+  email: z.string().email(),
+  name: z.string(),
+  phone: z.string().optional(),
+  role: z.enum(["user", "seller", "admin"]).default("user"),
+  isVerified: z.boolean().default(false),
+  createdAt: z.date().default(() => new Date()),
 });
 
-export const sellers = pgTable("sellers", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  shopName: text("shop_name").notNull(),
-  shopUrl: text("shop_url").notNull().unique(),
-  banner: text("banner"),
-  description: text("description"),
-  isApproved: boolean("is_approved").default(false),
-  isPremium: boolean("is_premium").default(false),
-  premiumExpiresAt: timestamp("premium_expires_at"),
-  walletBalance: decimal("wallet_balance", { precision: 10, scale: 2 }).default("0"),
-  totalEarnings: decimal("total_earnings", { precision: 10, scale: 2 }).default("0"),
-  createdAt: timestamp("created_at").defaultNow(),
+// Firestore Seller Schema
+export const sellerSchema = z.object({
+  userId: z.string(), // Firebase UID
+  shopName: z.string(),
+  shopUrl: z.string(),
+  banner: z.string().optional(),
+  description: z.string().optional(),
+  isApproved: z.boolean().default(false),
+  isPremium: z.boolean().default(false),
+  premiumExpiresAt: z.date().optional(),
+  walletBalance: z.number().default(0),
+  totalEarnings: z.number().default(0),
+  createdAt: z.date().default(() => new Date()),
 });
 
-export const products = pgTable("products", {
-  id: serial("id").primaryKey(),
-  sellerId: integer("seller_id").references(() => sellers.id),
-  title: text("title").notNull(),
-  description: text("description"),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  originalPrice: decimal("original_price", { precision: 10, scale: 2 }),
-  images: jsonb("images").$type<string[]>().default([]),
-  category: text("category"),
-  tags: jsonb("tags").$type<string[]>().default([]),
-  isActive: boolean("is_active").default(true),
-  rating: decimal("rating", { precision: 3, scale: 2 }).default("0"),
-  reviewCount: integer("review_count").default(0),
-  salesCount: integer("sales_count").default(0),
-  createdAt: timestamp("created_at").defaultNow(),
+// Firestore Product Schema  
+export const productSchema = z.object({
+  sellerId: z.string(), // Firebase UID
+  title: z.string(),
+  description: z.string().optional(),
+  price: z.number(),
+  originalPrice: z.number().optional(),
+  images: z.array(z.string()).default([]),
+  category: z.string().optional(),
+  tags: z.array(z.string()).default([]),
+  isActive: z.boolean().default(true),
+  rating: z.number().default(0),
+  reviewCount: z.number().default(0),
+  salesCount: z.number().default(0),
+  createdAt: z.date().default(() => new Date()),
 });
 
-export const orders = pgTable("orders", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  sellerId: integer("seller_id").references(() => sellers.id),
-  productId: integer("product_id").references(() => products.id),
-  quantity: integer("quantity").notNull(),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  commission: decimal("commission", { precision: 10, scale: 2 }).notNull(),
-  status: text("status").notNull().default("pending"), // pending, confirmed, shipped, delivered, cancelled
-  shippingAddress: jsonb("shipping_address"),
-  createdAt: timestamp("created_at").defaultNow(),
+// Firestore Order Schema
+export const orderSchema = z.object({
+  userId: z.string(), // Firebase UID
+  sellerId: z.string(), // Firebase UID  
+  productId: z.string(), // Product document ID
+  quantity: z.number(),
+  price: z.number(),
+  commission: z.number(),
+  status: z.enum(["pending", "confirmed", "shipped", "delivered", "cancelled"]).default("pending"),
+  shippingAddress: z.object({
+    name: z.string(),
+    address: z.string(),
+    city: z.string(),
+    pincode: z.string(),
+    phone: z.string(),
+  }).optional(),
+  createdAt: z.date().default(() => new Date()),
 });
 
-export const reviews = pgTable("reviews", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  productId: integer("product_id").references(() => products.id),
-  orderId: integer("order_id").references(() => orders.id),
-  rating: integer("rating").notNull(),
-  comment: text("comment"),
-  createdAt: timestamp("created_at").defaultNow(),
+// Firestore Review Schema
+export const reviewSchema = z.object({
+  userId: z.string(), // Firebase UID
+  productId: z.string(), // Product document ID
+  orderId: z.string(), // Order document ID
+  rating: z.number().min(1).max(5),
+  comment: z.string().optional(),
+  createdAt: z.date().default(() => new Date()),
 });
 
-export const referrals = pgTable("referrals", {
-  id: serial("id").primaryKey(),
-  referrerId: integer("referrer_id").references(() => users.id),
-  referredId: integer("referred_id").references(() => users.id),
-  rewardAmount: decimal("reward_amount", { precision: 10, scale: 2 }).default("0"),
-  isRewarded: boolean("is_rewarded").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
+// Firestore Referral Schema
+export const referralSchema = z.object({
+  referrerId: z.string(), // Firebase UID
+  referredId: z.string(), // Firebase UID
+  rewardAmount: z.number().default(0),
+  isRewarded: z.boolean().default(false),
+  createdAt: z.date().default(() => new Date()),
 });
 
-// Insert schemas
-export const insertUserSchema = createInsertSchema(users).omit({
-  id: true,
-  createdAt: true,
-});
+// Export types for TypeScript
+export type User = z.infer<typeof userSchema>;
+export type Seller = z.infer<typeof sellerSchema>;
+export type Product = z.infer<typeof productSchema>;
+export type Order = z.infer<typeof orderSchema>;
+export type Review = z.infer<typeof reviewSchema>;
+export type Referral = z.infer<typeof referralSchema>;
 
-export const insertSellerSchema = createInsertSchema(sellers).omit({
-  id: true,
-  createdAt: true,
-  isApproved: true,
-  isPremium: true,
-  walletBalance: true,
-  totalEarnings: true,
+// Insert schemas (for creating new documents)
+export const insertUserSchema = userSchema.omit({ createdAt: true });
+export const insertSellerSchema = sellerSchema.omit({ 
+  createdAt: true, 
+  isApproved: true, 
+  walletBalance: true, 
+  totalEarnings: true 
 });
-
-export const insertProductSchema = createInsertSchema(products).omit({
-  id: true,
-  createdAt: true,
-  rating: true,
-  reviewCount: true,
-  salesCount: true,
+export const insertProductSchema = productSchema.omit({ 
+  createdAt: true, 
+  rating: true, 
+  reviewCount: true, 
+  salesCount: true 
 });
+export const insertOrderSchema = orderSchema.omit({ createdAt: true, status: true });
+export const insertReviewSchema = reviewSchema.omit({ createdAt: true });
 
-export const insertOrderSchema = createInsertSchema(orders).omit({
-  id: true,
-  createdAt: true,
-  status: true,
-});
-
-export const insertReviewSchema = createInsertSchema(reviews).omit({
-  id: true,
-  createdAt: true,
-});
-
-// Types
-export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type Seller = typeof sellers.$inferSelect;
 export type InsertSeller = z.infer<typeof insertSellerSchema>;
-export type Product = typeof products.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
-export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
-export type Review = typeof reviews.$inferSelect;
 export type InsertReview = z.infer<typeof insertReviewSchema>;
-export type Referral = typeof referrals.$inferSelect;
