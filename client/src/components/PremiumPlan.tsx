@@ -69,7 +69,7 @@ export function PremiumPlan() {
                       <span className="text-lg text-gray-500">/month</span>
                     </div>
                     <div className="text-sm text-gray-500">
-                      Billed monthly via Razorpay
+                      Billed monthly via Cashfree
                     </div>
                   </div>
                   <Button
