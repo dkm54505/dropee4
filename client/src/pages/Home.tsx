@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ProductCard } from "@/components/ProductCard";
 import { HeroSection } from "@/components/HeroSection";
+import { TrendingStories } from "@/components/TrendingStories";
 import { BenefitsSection } from "@/components/BenefitsSection";
 import { DashboardPreview } from "@/components/DashboardPreview";
 import { PremiumPlan } from "@/components/PremiumPlan";
@@ -64,6 +65,8 @@ export default function Home() {
   return (
     <div className="min-h-screen pb-16 md:pb-0">
       <HeroSection />
+      
+      <TrendingStories />
 
       {/* Trending Products Section */}
       <section className="py-16 bg-white">
