@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { IndianRupee, ShoppingBag, Package, TrendingUp, Users, Star } from "lucide-react";
+import { IndianRupee, ShoppingBag, Package, TrendingUp, Users, Star, BarChart3, Link } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/useAuth";
+import { SupplierIntegration } from "@/components/SupplierIntegration";
+import SellerDashboard from "@/components/SellerDashboard";
 
 const dashboardStats = [
   {
@@ -172,11 +175,13 @@ export default function Dashboard() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="suppliers">Suppliers</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="seller">Seller Hub</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -245,16 +250,179 @@ export default function Dashboard() {
             </div>
           </TabsContent>
 
+          <TabsContent value="suppliers">
+            <SupplierIntegration />
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Progress Analysis */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <BarChart3 className="h-5 w-5" />
+                    <span>Progress Analysis</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Monthly Sales Target</span>
+                      <span>₹32,450 / ₹50,000</span>
+                    </div>
+                    <Progress value={65} className="h-2" />
+                    <p className="text-xs text-gray-600 mt-1">65% completed • 8 days left</p>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Customer Acquisition</span>
+                      <span>156 / 200</span>
+                    </div>
+                    <Progress value={78} className="h-2" />
+                    <p className="text-xs text-gray-600 mt-1">78% completed • On track</p>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Product Listings</span>
+                      <span>234 / 300</span>
+                    </div>
+                    <Progress value={78} className="h-2" />
+                    <p className="text-xs text-gray-600 mt-1">78% completed • Add 66 more</p>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Supplier Integration</span>
+                      <span>3 / 5</span>
+                    </div>
+                    <Progress value={60} className="h-2" />
+                    <p className="text-xs text-gray-600 mt-1">60% completed • 2 pending</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Performance Metrics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Performance Metrics</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center p-4 bg-green-50 rounded-lg">
+                      <p className="text-2xl font-bold text-green-600">3.2%</p>
+                      <p className="text-sm text-gray-600">Conversion Rate</p>
+                    </div>
+                    <div className="text-center p-4 bg-blue-50 rounded-lg">
+                      <p className="text-2xl font-bold text-blue-600">₹1,245</p>
+                      <p className="text-sm text-gray-600">Avg Order Value</p>
+                    </div>
+                    <div className="text-center p-4 bg-purple-50 rounded-lg">
+                      <p className="text-2xl font-bold text-purple-600">4.8</p>
+                      <p className="text-sm text-gray-600">Avg Rating</p>
+                    </div>
+                    <div className="text-center p-4 bg-orange-50 rounded-lg">
+                      <p className="text-2xl font-bold text-orange-600">87%</p>
+                      <p className="text-sm text-gray-600">Customer Satisfaction</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <h4 className="font-medium mb-3">Growth Trends</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span>Revenue Growth</span>
+                        <span className="text-green-600">+23.5%</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span>Order Growth</span>
+                        <span className="text-blue-600">+18.2%</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span>Customer Growth</span>
+                        <span className="text-purple-600">+12.8%</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Supplier Performance */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Supplier Performance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 border rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium">IndiaMart</h4>
+                      <Badge className="bg-orange-100 text-orange-800">Active</Badge>
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p>Products: 145</p>
+                      <p>Sales: ₹23,400</p>
+                      <p>Performance: 92%</p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 border rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium">Meesho</h4>
+                      <Badge className="bg-pink-100 text-pink-800">Active</Badge>
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p>Products: 89</p>
+                      <p>Sales: ₹18,900</p>
+                      <p>Performance: 87%</p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 border rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium">WooCommerce</h4>
+                      <Badge className="bg-purple-100 text-purple-800">Pending</Badge>
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p>Products: 67</p>
+                      <p>Sales: ₹15,600</p>
+                      <p>Performance: 78%</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="orders">
             <Card>
               <CardHeader>
                 <CardTitle>All Orders</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <ShoppingBag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Order management coming soon</p>
+                <div className="space-y-4">
+                  {recentOrders.map((order) => (
+                    <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <p className="font-medium text-gray-900">{order.product}</p>
+                        <p className="text-sm text-gray-600">{order.customer} • {order.date}</p>
+                        <p className="text-sm text-gray-500">Order ID: {order.id}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium text-gray-900">{order.amount}</p>
+                        <p className="text-sm text-green-600">Commission: {order.commission}</p>
+                        <Badge className={getStatusColor(order.status)}>
+                          {order.status}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+                <Button variant="outline" className="w-full mt-4">
+                  Load More Orders
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
@@ -264,27 +432,61 @@ export default function Dashboard() {
               <CardHeader>
                 <CardTitle>Product Management</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Product management coming soon</p>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-6 border rounded-lg hover:shadow-md transition-shadow">
+                    <Package className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Add Products</h3>
+                    <p className="text-sm text-gray-600 mb-4">Create new product listings</p>
+                    <Button className="w-full">Add Product</Button>
+                  </div>
+                  
+                  <div className="text-center p-6 border rounded-lg hover:shadow-md transition-shadow">
+                    <Link className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Import Products</h3>
+                    <p className="text-sm text-gray-600 mb-4">Import from suppliers</p>
+                    <Button variant="outline" className="w-full">Import</Button>
+                  </div>
+                  
+                  <div className="text-center p-6 border rounded-lg hover:shadow-md transition-shadow">
+                    <BarChart3 className="h-12 w-12 text-purple-500 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">Bulk Actions</h3>
+                    <p className="text-sm text-gray-600 mb-4">Manage multiple products</p>
+                    <Button variant="outline" className="w-full">Manage</Button>
+                  </div>
+                </div>
+                
+                <div className="mt-6">
+                  <h4 className="font-semibold mb-4">Top Performing Products</h4>
+                  <div className="space-y-3">
+                    {topProducts.map((product, index) => (
+                      <div key={product.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            {index + 1}
+                          </div>
+                          <div>
+                            <p className="font-medium">{product.title}</p>
+                            <div className="flex items-center space-x-1">
+                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                              <span className="text-sm text-gray-600">{product.rating}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium">{product.revenue}</p>
+                          <p className="text-sm text-gray-600">{product.sales} sales</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="analytics">
-            <Card>
-              <CardHeader>
-                <CardTitle>Analytics & Insights</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Advanced analytics coming soon</p>
-                </div>
-              </CardContent>
-            </Card>
+          <TabsContent value="seller">
+            <SellerDashboard />
           </TabsContent>
         </Tabs>
       </div>
