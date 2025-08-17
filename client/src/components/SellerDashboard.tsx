@@ -15,7 +15,7 @@ import {
   Zap,
   Link,
   Download,
-  Sync,
+  RefreshCw,
   Target,
   Calendar,
   Eye,
@@ -205,14 +205,13 @@ const SellerDashboard = () => {
                         disabled={syncingSuppliers.includes('indiamart')}
                       >
                         {syncingSuppliers.includes('indiamart') ? (
-                          <Sync className="h-3 w-3 mr-1 animate-spin" />
+                          <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
                         ) : (
                           <Download className="h-3 w-3 mr-1" />
                         )}
                         Sync
                       </Button>
                     </div>
-                  </div>
                 </div>
 
                 {/* Meesho Integration */}
@@ -247,7 +246,7 @@ const SellerDashboard = () => {
                         disabled={syncingSuppliers.includes('meesho')}
                       >
                         {syncingSuppliers.includes('meesho') ? (
-                          <Sync className="h-3 w-3 mr-1 animate-spin" />
+                          <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
                         ) : (
                           <Download className="h-3 w-3 mr-1" />
                         )}
@@ -289,7 +288,7 @@ const SellerDashboard = () => {
                         disabled={syncingSuppliers.includes('woocommerce')}
                       >
                         {syncingSuppliers.includes('woocommerce') ? (
-                          <Sync className="h-3 w-3 mr-1 animate-spin" />
+                          <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
                         ) : (
                           <Download className="h-3 w-3 mr-1" />
                         )}
